@@ -1,0 +1,81 @@
+﻿<Window x:Class="FitnessHard.Pages.ClientMenuWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FitnessHard.Pages"
+        mc:Ignorable="d"
+        Title="Клиенты" Height="800" Width="800">
+    <Grid Background="{StaticResource MainBackground}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.45*" />
+            <RowDefinition Height="3*" />
+            <RowDefinition Height="1.5*" />
+            <RowDefinition Height="0.5*" />
+        </Grid.RowDefinitions>
+        <Grid Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.5*" />
+                <ColumnDefinition Width="0.5*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <StackPanel>
+                <TextBlock Text="ФИО" FontSize="20"/>
+                <TextBox x:Name="FullNameBox" FontSize="18"/>
+            </StackPanel>
+            <StackPanel Grid.Column="1" Margin="10,0,0,0">
+                <TextBlock Text="Телефон" FontSize="20"/>
+                <TextBox x:Name="PhoneNumberBox" FontSize="18"/>
+            </StackPanel>
+            <Button x:Name="SearchButton" Click="SearchButton_Click" Grid.Column="2" Content="Поиск" Margin="40,10" FontSize="22"/>
+        </Grid>
+        <DataGrid Margin="5" SelectionMode="Single" SelectionChanged="ClientsGrid_SelectionChanged" IsReadOnly="True" FontSize="20" Grid.Row="1" x:Name="ClientsGrid">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ФИО" Width="*" Binding="{Binding Name}"/>
+                <DataGridTextColumn Header="Номер телефона" Width="*" Binding="{Binding Phone}"/>
+                <DataGridTextColumn Header="Дата рождения" Width="*" Binding="{Binding Dob}"/>
+            </DataGrid.Columns>
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Добавить" x:Name="AddButton" Click="AddClientButton_Click" />
+                    <MenuItem Header="Изменить" IsEnabled="False" x:Name="EditButton" Click="EditClientButton_Click" />
+                    <MenuItem Header="Удалить" IsEnabled="False" x:Name="RemoveButton" Click="RemoveButton_Click" />
+                    <Separator/>
+                    <MenuItem Header="Обновить данные" x:Name="RefreshButton" Click="RefreshButton_Click" />
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+        </DataGrid>
+        <Grid x:Name="ClientPanel" Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.5*" />
+                <ColumnDefinition Width="0.5*" />
+                <ColumnDefinition Width="0.5*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <StackPanel Margin="10">
+                <TextBlock Text="ФИО" FontSize="20"/>
+                <TextBox IsEnabled="False" Text="{Binding Name}" x:Name="FullNameEditBox" FontSize="18"/>
+            </StackPanel>
+            <StackPanel Grid.Column="1" Margin="10">
+                <TextBlock Text="Телефон" FontSize="20"/>
+                <TextBox IsEnabled="False" Text="{Binding Phone}" x:Name="PhoneNumberEditBox" FontSize="18"/>
+            </StackPanel>
+            <StackPanel Grid.Column="2" Margin="10">
+                <TextBlock Text="Дата рождения" FontSize="20"/>
+                <DatePicker IsEnabled="False" SelectedDate="{Binding Dob}" x:Name="DobEditBox" FontSize="18"/>
+            </StackPanel>
+            <StackPanel Grid.Column="3" Margin="10">
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="Добавить" x:Name="AddClientButton" FontSize="18" Click="AddClientButton_Click" Width="107" Margin="30,0,0,0" />
+                    <Button Content="Удалить" x:Name="DeleteButton" Click="DeleteButton_Click" FontSize="18"  Width="90" Margin="50,0,0,0"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" >
+                    <Button Content="Редактировать" x:Name="EditClientButton" FontSize="18" Click="EditClientButton_Click" Width="128" Margin="20,20,0,0"/>
+                    <Button Content="Сохранить" x:Name="SaveClientButton" FontSize="18" Click="SaveClientButton_Click" Width="93" Margin="40,20,0,0"/>
+                </StackPanel>
+                <Button Content="Оформить абонемент" FontSize="20" Click="AddSubscription_Click" Width="210" Margin="10,20,0,0"/>
+            </StackPanel>
+        </Grid>
+        <Button Content="Выход" FontSize="26" HorizontalAlignment="Right" VerticalAlignment="Center" Width="120" Grid.Row="3" Click="ExitButton_Click"/>
+    </Grid>
+</Window>

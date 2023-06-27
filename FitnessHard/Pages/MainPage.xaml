@@ -1,0 +1,113 @@
+﻿<Page x:Class="FitnessHard.Pages.MainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:FitnessHard.Pages"
+      mc:Ignorable="d"
+      d:Height="800" d:Width="1200"
+      Title="MainPage">
+
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="3*" />
+        </Grid.ColumnDefinitions>
+        <Grid Margin="0,0,10,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="10*" />
+            </Grid.RowDefinitions>
+            <StackPanel>
+                <TextBlock Text="Номер абонемента" Margin="0,0,0,2" FontSize="16"/>
+                <Grid HorizontalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="5*" />
+                        <ColumnDefinition Width="1*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBox BorderThickness="0" x:Name="SearchBox" Foreground="{StaticResource Accent}" Background="{StaticResource AddBackground}" FontSize="17" HorizontalAlignment="Stretch"/>
+                    <Button x:Name="SearchButton" Click="SearchButton_Click" Content="Поиск" Width="50" BorderBrush="{StaticResource Accent}" BorderThickness="1" Grid.Column="1"/>
+                </Grid>
+            </StackPanel>
+            <DataGrid IsReadOnly="True" Grid.Row="1" SelectionChanged="SubscriptionGrid_SelectionChanged" x:Name="SubscriptionGrid" Margin="0,5,0,0">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="*" Header="Номер" Binding="{Binding Id}"/>
+                    <DataGridCheckBoxColumn Width="*" Header="Активирован" Binding="{Binding Status}"/>
+                    <DataGridTextColumn Width="*" Header="Абонемент" Binding="{Binding Subscription.Title}"/>
+                    <DataGridTemplateColumn Width="50" Header="Действия" x:Name="AdminDel" Visibility="Hidden">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="Удалить" Click="DeleteButton_Click"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.5*" />
+                <RowDefinition Height="2*" />
+                <RowDefinition Height="2*" />
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="0.5*" />
+            </Grid.RowDefinitions>
+            <StackPanel>
+                <TextBlock Text="Информация об абонементе" FontSize="16"/>
+                <TextBlock x:Name="SubscriptionInfoBlock" FontSize="16"/>
+            </StackPanel>
+            <Grid Grid.Row="1" Margin="0,10,0,0">
+                <TextBlock Text="Доступные услуги" Margin="0,0,0,10"/>
+                <DataGrid SelectionMode="Single" IsReadOnly="True" x:Name="ServiceGrid">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Width="*" Header="Услуга" Binding="{Binding Title}"/>
+                        <DataGridTextColumn Width="*" Header="Доступное количество" Binding="{Binding Count}"/>
+                    </DataGrid.Columns>
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Использовать услугу" Click="MenuItem_Click"/>
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+                </DataGrid>
+            </Grid>
+            <Grid Grid.Row="2" Margin="0,10,0,0">
+                <TextBlock Text="История посещений" FontSize="16" Margin="0,0,0,10"/>
+                <DataGrid x:Name="ServiceLogGrid" Margin="0,20,0,0" IsReadOnly="True" SelectionChanged="ServiceLogGrid_SelectionChanged">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Width="*" Header="Услуга" Binding="{Binding Service.Title}"/>   
+                        <DataGridTextColumn Width="*" Header="Дата" Binding="{Binding DateUse}"/>
+                        <DataGridTextColumn Width="*" Header="Тренер" Binding="{Binding Trainer.Name}"/>
+                        <DataGridTextColumn Width="*" Header="Клиент" Binding="{Binding SubscriptionClient.Client.Name}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+
+            <Grid x:Name="NoRegServicePanel" Grid.Row="3" Margin="0,10,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*" />
+                </Grid.RowDefinitions>
+                <TextBlock Text="Записать посещение" FontSize="16"/>
+                <TextBlock Grid.Row="1" Text="Клиент" FontSize="16"/>
+                <TextBlock Margin="0,5,0,0" Grid.Row="2" Text="Тренер" FontSize="16"/>
+                <ComboBox x:Name="ClientBox" SelectedValue="{Binding SubscriptionClient}" DisplayMemberPath="Client.Name" Grid.Row="1" Margin="221,0,221,2" FontSize="16" Grid.ColumnSpan="3"/>
+                <ComboBox x:Name="ServiceBox" SelectionChanged="ServiceBox_SelectionChanged" SelectedValue="{Binding Service}" DisplayMemberPath="Title" Margin="0,5,0,0" Grid.Row="2" Grid.Column="1" FontSize="16"/>
+                
+                <!-- Добавлен ComboBox для выбора тренера -->
+                <Button Grid.Column="2" Click="OkButton_Click" Grid.Row="1" Grid.RowSpan="2" Content="ОК" HorizontalAlignment="Center" Width="70" FontSize="26"/>
+
+            </Grid>
+            <StackPanel x:Name="menuStackPanel" Visibility="Hidden" Grid.Row="4" Margin="0,10,0,0" HorizontalAlignment="Center" Orientation="Horizontal">
+                <Button Width="140" FontSize="20" Content="Клиенты" Click="ClientMenuClick"/>
+                <Button Width="140" Margin="10,0,0,0" FontSize="20" Content="Абонементы" Click="SubscriptionMenuClick"/>
+                <Button Width="300" Margin="10,0,0,0" FontSize="20" Content="Формировать отчет" Click="PrintButton_Click"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Page>
